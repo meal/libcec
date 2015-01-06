@@ -71,6 +71,13 @@ AC_ARG_ENABLE([rpi],
   [use_rpi=$enableval],
   [use_rpi=auto])
 
+## SUNXI support
+AC_ARG_ENABLE([sunxi],
+  [AS_HELP_STRING([--enable-sunxi],
+  [enable support for the SUNXI (default is no)])],
+  [use_sunxi=$enableval],
+  [use_sunxi=no])
+
 ## Optional path to the RPi's dev headers
 AC_ARG_WITH([rpi-include-path],
   [AS_HELP_STRING([--with-rpi-include-path],
@@ -282,6 +289,17 @@ if test "x$use_rpi" != "xno"; then
 else
   AM_CONDITIONAL(USE_RPI_API, false)
   features="$features\n  Raspberry Pi support :\t\tno"
+fi
+
+## mark SUNXI support as available
+if test "x$use_sunxi" != "xno"; then
+  AC_DEFINE([HAVE_SUNXI_API]),[1],[Define 1 to include SUNXI support])
+  AM_CONDITIONAL(USE_SUNXI_API, true)
+  features="$features\n SUNXI support :\t\t\tyes"
+  LIB_INFO="$LIB_INFO 'SUNXI'"
+else
+  AM_CONDITIONAL(USE_SUNXI_API, false)
+  features="$features\n SUNXI support :\t\t\tno"
 fi
 
 ## mark TDA995x support as available
